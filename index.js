@@ -98,6 +98,14 @@ async function run() {
       const result = await registerCampCollection.find(query).toArray();
       res.send(result);
     });
+    app.delete("/registerCamps/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+
+      // send data to DB
+      const result = await registerCampCollection.deleteOne(query);
+      res.send(result);
+    });
     // registerCamp db end
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
