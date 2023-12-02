@@ -54,7 +54,30 @@ async function run() {
       const result = await campCollection.deleteOne(query);
       res.send(result);
     });
-    
+    app.patch("/camp/:id", async (req, res) => {
+      const item = req.body;
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const updatedDoc = {
+        $set: {
+          campName: item.campName,
+          services: item.services,
+          healthcareProfessionals: item.healthcareProfessionals,
+          targetAudience: item.targetAudience,
+          campFees: item.campFees,
+          date: item.date,
+          time: item.time,
+          venue: item.venue,
+          enroll: item.enroll,
+          shortDescription: item.shortDescription,
+          longDescription: item.longDescription,
+          image: item.image,
+        },
+      };
+
+      const result = await campCollection.updateOne(filter, updatedDoc);
+      res.send(result);
+    });
     // camp db end
 
     // Send a ping to confirm a successful connection
