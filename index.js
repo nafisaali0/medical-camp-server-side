@@ -26,7 +26,9 @@ async function run() {
     await client.connect();
 
     const campCollection = client.db("ameliaMedicalCampDB").collection("camp");
-    const registerCampCollection = client.db("ameliaMedicalCampDB").collection("registerCamp");
+    const registerCampCollection = client
+      .db("ameliaMedicalCampDB")
+      .collection("registerCamps");
 
     // camp db start
     app.post("/camp", async (req, res) => {
@@ -73,7 +75,7 @@ async function run() {
           enroll: item.enroll,
           shortDescription: item.shortDescription,
           longDescription: item.longDescription,
-          image: item.image, 
+          image: item.image,
         },
       };
 
@@ -81,6 +83,12 @@ async function run() {
       res.send(result);
     });
     // camp db end
+    // registerCamp db start
+    app.post("/registerCamps", async (req, res) => {
+      const registercampItem = req.body;
+      const result = await registerCampCollection.insertOne(registercampItem);
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
