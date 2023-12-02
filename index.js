@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -35,6 +35,14 @@ async function run() {
     });
      app.get("/camp", async (req, res) => {
       const result = await campCollection.find().toArray();
+      res.send(result);
+    });
+    app.get("/camp/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+
+      // send data to DB
+      const result = await campCollection.findOne(query);
       res.send(result);
     });
     // camp db end
