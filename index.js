@@ -33,6 +33,10 @@ async function run() {
       const result = await campCollection.insertOne(item);
       res.send(result);
     });
+     app.get("/camp", async (req, res) => {
+      const result = await campCollection.find().toArray();
+      res.send(result);
+    });
     // camp db end
 
 
