@@ -89,7 +89,16 @@ async function run() {
       const result = await registerCampCollection.insertOne(registercampItem);
       res.send(result);
     });
-
+    app.get("/registerCamps", async (req, res) => {
+      let query = {};
+      // condition for show blogs based on current user wishlist
+      if (req.query?.email) {
+        query = { email: req.query.email };
+      }
+      const result = await registerCampCollection.find(query).toArray();
+      res.send(result);
+    });
+    // registerCamp db end
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
