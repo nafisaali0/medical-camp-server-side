@@ -33,7 +33,7 @@ async function run() {
       const result = await campCollection.insertOne(item);
       res.send(result);
     });
-     app.get("/camp", async (req, res) => {
+    app.get("/camp", async (req, res) => {
       const result = await campCollection.find().toArray();
       res.send(result);
     });
@@ -45,11 +45,17 @@ async function run() {
       const result = await campCollection.findOne(query);
       res.send(result);
     });
+    app.delete("/camp/:id", async (req, res) => {
+      const id = req.params.id;
+      // console.log(id)
+      const query = { _id: new ObjectId(id) };
+
+      // send data to DB
+      const result = await campCollection.deleteOne(query);
+      res.send(result);
+    });
+    
     // camp db end
-
-
-
-
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
