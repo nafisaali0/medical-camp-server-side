@@ -38,16 +38,16 @@ async function run() {
       const result = await campCollection.find().toArray();
       res.send(result);
     });
-    app.get("/camp/:id", async (req, res) => {
-      const id = req.params.id;
+    app.get("/camp/:campId", async (req, res) => {
+      const id = req.params.campId;
       const query = { _id: new ObjectId(id) };
 
       // send data to DB
       const result = await campCollection.findOne(query);
       res.send(result);
     });
-    app.delete("/camp/:id", async (req, res) => {
-      const id = req.params.id;
+    app.delete("/camp/:campId", async (req, res) => {
+      const id = req.params.campId;
       // console.log(id)
       const query = { _id: new ObjectId(id) };
 
@@ -56,9 +56,9 @@ async function run() {
       res.send(result);
     });
     // update
-    app.patch("/camp/:id", async (req, res) => {
+    app.patch("/camp/:campId", async (req, res) => {
       const item = req.body;
-      const id = req.params.id;
+      const id = req.params.campId;
       const filter = { _id: new ObjectId(id) };
       const updatedDoc = {
         $set: {
