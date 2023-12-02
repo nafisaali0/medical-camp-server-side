@@ -26,6 +26,7 @@ async function run() {
     await client.connect();
 
     const campCollection = client.db("ameliaMedicalCampDB").collection("camp");
+    const registerCampCollection = client.db("ameliaMedicalCampDB").collection("registerCamp");
 
     // camp db start
     app.post("/camp", async (req, res) => {
@@ -54,6 +55,7 @@ async function run() {
       const result = await campCollection.deleteOne(query);
       res.send(result);
     });
+    // update
     app.patch("/camp/:id", async (req, res) => {
       const item = req.body;
       const id = req.params.id;
@@ -71,7 +73,7 @@ async function run() {
           enroll: item.enroll,
           shortDescription: item.shortDescription,
           longDescription: item.longDescription,
-          image: item.image,
+          image: item.image, 
         },
       };
 
