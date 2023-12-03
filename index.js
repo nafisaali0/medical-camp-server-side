@@ -45,8 +45,13 @@ async function run() {
       res.send(result);
     });
     app.get("/users", async (req, res) => {
+      let query = {};
+      // condition for show users based on email
+      if (req.query?.email) {
+        query = { email: req.query.email };
+      }
       // console.log(req.headers);
-      const result = await userCollection.find().toArray();
+      const result = await userCollection.find(query).toArray();
       res.send(result);
     });
     // user db end
