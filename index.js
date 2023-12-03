@@ -44,6 +44,11 @@ async function run() {
       const result = await userCollection.insertOne(user);
       res.send(result);
     });
+    app.get("/users", async (req, res) => {
+      // console.log(req.headers);
+      const result = await userCollection.find().toArray();
+      res.send(result);
+    });
     // user db end
 
     // camp db start
