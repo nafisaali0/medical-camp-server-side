@@ -63,6 +63,10 @@ async function run() {
         $set: {
           role: item.role,
           phone: item.phone,
+          age: item.age,
+          gender: item.gender,
+          interestMedical: item.interestMedical,
+          medicalSpecialty: item.medicalSpecialty,
           address: item.address,
         },
       };
