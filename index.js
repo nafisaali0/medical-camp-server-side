@@ -29,6 +29,22 @@ async function run() {
     const registerCampCollection = client
       .db("ameliaMedicalCampDB")
       .collection("registerCamps");
+    const userCollection = client.db("ameliaMedicalCampDB").collection("users");
+
+    // user db start
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+
+      const query = { email: user.email };
+      const existingUser = await userCollection.findOne(query);
+
+      if (existingUser) {
+        return res.send({ message: "user already exists", insertedId: null });
+      }
+      const result = await userCollection.insertOne(user);
+      res.send(result);
+    });
+    // user db end
 
     // camp db start
     app.post("/camp", async (req, res) => {
@@ -83,6 +99,7 @@ async function run() {
       res.send(result);
     });
     // camp db end
+
     // registerCamp db start
     app.post("/registerCamps", async (req, res) => {
       const registercampItem = req.body;
@@ -107,6 +124,7 @@ async function run() {
       res.send(result);
     });
     // registerCamp db end
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
