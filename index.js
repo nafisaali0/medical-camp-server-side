@@ -54,6 +54,22 @@ async function run() {
       const result = await userCollection.find(query).toArray();
       res.send(result);
     });
+    // update
+    app.patch("/users/:id", async (req, res) => {
+      const item = req.body;
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const updatedDoc = {
+        $set: {
+          role: item.role,
+          phone: item.phone,
+          address: item.address,
+        },
+      };
+
+      const result = await userCollection.updateOne(filter, updatedDoc);
+      res.send(result);
+    });
     // user db end
 
     // camp db start
