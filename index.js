@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 require("dotenv").config(); //hide DBpass
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY); //payment
 const port = process.env.PORT || 5000;
 
 // middleware
@@ -30,6 +31,9 @@ async function run() {
       .db("ameliaMedicalCampDB")
       .collection("registerCamps");
     const userCollection = client.db("ameliaMedicalCampDB").collection("users");
+    const paymentCollection = client
+      .db("ameliaMedicalCampDB")
+      .collection("payments");
 
     // user db start
     app.post("/users", async (req, res) => {
@@ -136,9 +140,15 @@ async function run() {
       const result = await registerCampCollection.insertOne(registercampItem);
       res.send(result);
     });
+    app.get("/registerCamps/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await registerCampCollection.find(query).toArray();
+      res.send(result);
+    });
     app.get("/registerCamps", async (req, res) => {
       let query = {};
-      // condition for show blogs based on current user wishlist
+      // condition for show regCamps based on current user wishlist
       if (req.query?.email) {
         query = { email: req.query.email };
       }
@@ -154,6 +164,36 @@ async function run() {
       res.send(result);
     });
     // registerCamp db end
+    // payment api start
+    app.post("/create-payment-intent", async (req, res) => {
+      const { campFees } = req.body;
+      const amount = parseInt(campFees * 100);
+      // console.log(amount)
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: "usd",
+        payment_method_types: ["card"],
+      });
+      res.send({
+        clientSecret: paymentIntent.client_secret,
+      });
+    });
+    app.post("/payments", async (req, res) => {
+      const payment = req.body;
+      const paymentResult = await paymentCollection.insertOne(payment);
+      //carefully delete each item from the cart
+      console.log("payment info", payment);
+      res.send({ paymentResult });
+    });
+    app.get("/payments", async (req, res) => {
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query.email };
+      }
+      const result = await paymentCollection.find(query).toArray();
+      res.send(result);
+    });
+    // payment api end
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
