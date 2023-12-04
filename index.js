@@ -34,6 +34,9 @@ async function run() {
     const paymentCollection = client
       .db("ameliaMedicalCampDB")
       .collection("payments");
+    const feedbackCollection = client
+      .db("ameliaMedicalCampDB")
+      .collection("feedbacks");
 
     // user db start
     app.post("/users", async (req, res) => {
@@ -194,6 +197,18 @@ async function run() {
       res.send(result);
     });
     // payment api end
+
+    // feedback api start
+    app.post("/feedbacks", async (req, res) => {
+      const customerFeedback = req.body;
+      const result = await feedbackCollection.insertOne(customerFeedback);
+      res.send(result);
+    });
+    app.get("/feedbacks", async (req, res) => {
+      const result = await feedbackCollection.find().toArray();
+      res.send(result);
+    });
+    // feedback api end
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
