@@ -37,6 +37,9 @@ async function run() {
     const feedbackCollection = client
       .db("ameliaMedicalCampDB")
       .collection("feedbacks");
+    const bloodPressureCollection = client
+      .db("ameliaMedicalCampDB")
+      .collection("bloodPressure");
 
     // user db start
     app.post("/users", async (req, res) => {
@@ -167,6 +170,22 @@ async function run() {
       res.send(result);
     });
     // registerCamp db end
+    // blood pressure db start
+    app.post("/bloodPressure", async (req, res) => {
+      const item = req.body;
+      const result = await bloodPressureCollection.insertOne(item);
+      res.send(result);
+    });
+    app.get("/bloodPressure", async (req, res) => {
+      let query = {};
+      // condition for show pressure data
+      if (req.query?.email) {
+        query = { email: req.query.email };
+      }
+      const result = await bloodPressureCollection.find(query).toArray();
+      res.send(result);
+    });
+    // blood pressure db end
     // payment api start
     app.post("/create-payment-intent", async (req, res) => {
       const { campFees } = req.body;
