@@ -71,13 +71,11 @@ async function run() {
       const filter = { _id: new ObjectId(id) };
       const updatedDoc = {
         $set: {
-          role: item.role,
-          phone: item.phone,
-          age: item.age,
-          gender: item.gender,
-          interestMedical: item.interestMedical,
-          medicalSpecialty: item.medicalSpecialty,
-          address: item.address,
+          userRole: item.userRole,
+          userPhone: item.userPhone,
+          userAge: item.userAge,
+          userGender: item.userGender,
+          userAddress: item.userAddress,
         },
       };
 
