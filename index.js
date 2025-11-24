@@ -179,7 +179,7 @@ async function run() {
       res.send(result);
     });
     // registerCamp db end
-    
+
     // payment api start
     app.post("/create-payment-intent", async (req, res) => {
       const { campFees } = req.body;
