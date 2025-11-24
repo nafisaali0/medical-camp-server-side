@@ -69,17 +69,28 @@ async function run() {
       const item = req.body;
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
+      const cleanData = {};
+
+      Object.entries(item).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          cleanData[key] = value;
+        }
+      });
+
       const updatedDoc = {
-        $set: {
-          userRole: item.userRole,
-          userPhone: item.userPhone,
-          userAge: item.userAge,
-          userGender: item.userGender,
-          userAddress: item.userAddress,
-        },
+        $set: cleanData,
       };
 
       const result = await userCollection.updateOne(filter, updatedDoc);
+      res.send(result);
+    });
+    app.delete("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      // console.log(id)
+      const query = { _id: new ObjectId(id) };
+
+      // send data to DB
+      const result = await userCollection.deleteOne(query);
       res.send(result);
     });
     // user db end
