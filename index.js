@@ -127,21 +127,32 @@ async function run() {
       const item = req.body;
       const id = req.params.campId;
       const filter = { _id: new ObjectId(id) };
+      // const updatedDoc = {
+      //   $set: {
+      //     campName: item.campName,
+      //     services: item.services,
+      //     healthcareProfessionals: item.healthcareProfessionals,
+      //     targetAudience: item.targetAudience,
+      //     campFees: item.campFees,
+      //     date: item.date,
+      //     time: item.time,
+      //     venue: item.venue,
+      //     enroll: item.enroll,
+      //     shortDescription: item.shortDescription,
+      //     longDescription: item.longDescription,
+      //     image: item.image,
+      //   },
+      // };
+
+      // new
+      Object.entries(item).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          cleanData[key] = value;
+        }
+      });
+
       const updatedDoc = {
-        $set: {
-          campName: item.campName,
-          services: item.services,
-          healthcareProfessionals: item.healthcareProfessionals,
-          targetAudience: item.targetAudience,
-          campFees: item.campFees,
-          date: item.date,
-          time: item.time,
-          venue: item.venue,
-          enroll: item.enroll,
-          shortDescription: item.shortDescription,
-          longDescription: item.longDescription,
-          image: item.image,
-        },
+        $set: cleanData,
       };
 
       const result = await campCollection.updateOne(filter, updatedDoc);
