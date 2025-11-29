@@ -127,6 +127,8 @@ async function run() {
       const item = req.body;
       const id = req.params.campId;
       const filter = { _id: new ObjectId(id) };
+      const cleanData = {};
+      
       // const updatedDoc = {
       //   $set: {
       //     campName: item.campName,
