@@ -29,7 +29,7 @@ async function run() {
     const campCollection = client.db("ameliaMedicalCampDB").collection("camp");
     const registerCampCollection = client
       .db("ameliaMedicalCampDB")
-      .collection("registerCamps");
+      .collection("enrollCamp");
     const userCollection = client.db("ameliaMedicalCampDB").collection("users");
     const paymentCollection = client
       .db("ameliaMedicalCampDB")
@@ -162,19 +162,19 @@ async function run() {
     });
     // camp db end
 
-    // registerCamp db start
-    app.post("/registerCamps", async (req, res) => {
+    // enrollCamp db start
+    app.post("/enrollCamp", async (req, res) => {
       const registercampItem = req.body;
       const result = await registerCampCollection.insertOne(registercampItem);
       res.send(result);
     });
-    app.get("/registerCamps/:id", async (req, res) => {
+    app.get("/enrollCamp/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await registerCampCollection.find(query).toArray();
       res.send(result);
     });
-    app.get("/registerCamps", async (req, res) => {
+    app.get("/enrollCamp", async (req, res) => {
       let query = {};
       // condition for show regCamps based on current user wishlist
       if (req.query?.email) {
@@ -183,7 +183,7 @@ async function run() {
       const result = await registerCampCollection.find(query).toArray();
       res.send(result);
     });
-    app.delete("/registerCamps/:id", async (req, res) => {
+    app.delete("/enrollCamp/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
 
