@@ -37,9 +37,6 @@ async function run() {
     const feedbackCollection = client
       .db("ameliaMedicalCampDB")
       .collection("feedbacks");
-    const bloodPressureCollection = client
-      .db("ameliaMedicalCampDB")
-      .collection("bloodPressure");
 
     // user db start
     app.post("/users", async (req, res) => {
@@ -195,8 +192,8 @@ async function run() {
 
     // payment api start
     app.post("/create-payment-intent", async (req, res) => {
-      const { campFees } = req.body;
-      const amount = parseInt(campFees * 100);
+      const { enrollCampFee } = req.body;
+      const amount = parseInt(enrollCampFee * 100);
       // console.log(amount)
       const paymentIntent = await stripe.paymentIntents.create({
         amount: amount,
