@@ -37,10 +37,7 @@ async function run() {
     const feedbackCollection = client
       .db("ameliaMedicalCampDB")
       .collection("feedbacks");
-    const categoryCollection = client
-      .db("ameliaMedicalCampDB")
-      .collection("category");
-
+      
     // user db start
     app.post("/users", async (req, res) => {
       const user = req.body;
@@ -122,7 +119,6 @@ async function run() {
       const result = await campCollection.deleteOne(query);
       res.send(result);
     });
-    // update
     app.patch("/camp/:campId", async (req, res) => {
       const item = req.body;
       const id = req.params.campId;
@@ -161,29 +157,6 @@ async function run() {
       res.send(result);
     });
     // camp db end
-
-    // category db start
-    app.post("/categories", async (req, res) => {
-      const category = req.body;
-
-      const query = { campCategory: category.campCategory };
-      const existingCategory = await categoryCollection.findOne(query);
-
-      if (existingCategory) {
-        return res.send({
-          message: "Category already exists",
-          insertedId: null,
-        });
-      }
-
-      const result = await categoryCollection.insertOne(category);
-      res.send(result);
-    });
-    app.get("/categories", async (req, res) => {
-      const result = await categoryCollection.find().toArray();
-      res.send(result);
-    });
-    // category db end
 
     // enrollCamp db start
     app.post("/enrollCamp", async (req, res) => {
