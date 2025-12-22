@@ -37,7 +37,7 @@ async function run() {
     const feedbackCollection = client
       .db("ameliaMedicalCampDB")
       .collection("feedbacks");
-      
+
     // user db start
     app.post("/users", async (req, res) => {
       const user = req.body;
@@ -110,6 +110,16 @@ async function run() {
       const result = await campCollection.findOne(query);
       res.send(result);
     });
+    app.get("/camp/:campCategory", async (req, res) => {
+      const campCategory = req.params.campCategory;
+      // const campCategory = req.params.campCategory.toLowerCase();
+
+      const query = { campCategory };
+      const result = await campCollection.find(query).toArray();
+
+      res.send(result);
+    });
+
     app.delete("/camp/:campId", async (req, res) => {
       const id = req.params.campId;
       // console.log(id)
