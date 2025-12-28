@@ -27,7 +27,7 @@ async function run() {
     // await client.connect();
 
     const campCollection = client.db("ameliaMedicalCampDB").collection("camp");
-    const registerCampCollection = client
+    const enrollCampCollection = client
       .db("ameliaMedicalCampDB")
       .collection("enrollCamp");
     const userCollection = client.db("ameliaMedicalCampDB").collection("users");
@@ -161,13 +161,13 @@ async function run() {
     // enrollCamp db start
     app.post("/enrollCamp", async (req, res) => {
       const registercampItem = req.body;
-      const result = await registerCampCollection.insertOne(registercampItem);
+      const result = await enrollCampCollection.insertOne(registercampItem);
       res.send(result);
     });
     app.get("/enrollCamp/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-      const result = await registerCampCollection.find(query).toArray();
+      const result = await enrollCampCollection.find(query).toArray();
       res.send(result);
     });
     app.get("/enrollCamp", async (req, res) => {
@@ -176,7 +176,26 @@ async function run() {
       if (req.query?.email) {
         query = { email: req.query.email };
       }
-      const result = await registerCampCollection.find(query).toArray();
+      const result = await enrollCampCollection.find(query).toArray();
+      res.send(result);
+    });
+    app.patch("/enrollCamp/:id", async (req, res) => {
+      const item = req.body;
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const cleanData = {};
+
+      Object.entries(item).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          cleanData[key] = value;
+        }
+      });
+
+      const updatedDoc = {
+        $set: cleanData,
+      };
+
+      const result = await enrollCampCollection.updateOne(filter, updatedDoc);
       res.send(result);
     });
     app.delete("/enrollCamp/:id", async (req, res) => {
@@ -184,7 +203,7 @@ async function run() {
       const query = { _id: new ObjectId(id) };
 
       // send data to DB
-      const result = await registerCampCollection.deleteOne(query);
+      const result = await enrollCampCollection.deleteOne(query);
       res.send(result);
     });
     // registerCamp db end
